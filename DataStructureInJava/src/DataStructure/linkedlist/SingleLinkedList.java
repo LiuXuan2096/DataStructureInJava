@@ -21,7 +21,8 @@ public class SingleLinkedList<E> extends AbstractList<E> {
      */
     @Override
     public void clear() {
-
+        size = 0;
+        first = null;
     }
 
     /**
@@ -32,7 +33,7 @@ public class SingleLinkedList<E> extends AbstractList<E> {
      */
     @Override
     public E get(int index) {
-        return null;
+        return node(index).element;
     }
 
     /**
@@ -44,7 +45,10 @@ public class SingleLinkedList<E> extends AbstractList<E> {
      */
     @Override
     public E set(int index, E element) {
-        return null;
+        Node<E> node = node(index);
+        E old = node.element;
+        node.element = element;
+        return old;
     }
 
     /**
@@ -55,7 +59,12 @@ public class SingleLinkedList<E> extends AbstractList<E> {
      */
     @Override
     public void add(int index, E element) {
+        rangeCheckForAdd(index);
 
+        Node<E> prev = index == 0 ? first : node(index - 1);
+        prev.next = new Node<>(element, prev.next);
+
+        size++;
     }
 
     /**
@@ -66,7 +75,14 @@ public class SingleLinkedList<E> extends AbstractList<E> {
      */
     @Override
     public E remove(int index) {
-        return null;
+        rangeCheck(index);
+
+        Node<E> prev = index == 0 ? first : node(index - 1);
+        Node<E> node = prev.next;
+        prev.next = node.next;
+
+        size--;
+        return node.element;
     }
 
     /**
@@ -77,7 +93,20 @@ public class SingleLinkedList<E> extends AbstractList<E> {
      */
     @Override
     public int indexOf(E element) {
-        return 0;
+        if (element == null) {
+            Node<E> node = first;
+            for (int i = 0; i < size; i++) {
+                if (node.element == null) return i;
+                node = node.next;
+            }
+        } else {
+            Node<E> node = first;
+            for (int i = 0; i < size; i++) {
+                if (element.equals(node.element)) return i;
+                node = node.next;
+            }
+        }
+        return ELEMENT_NOT_FOUND;
     }
 
     /**
